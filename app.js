@@ -1,5 +1,5 @@
 const express = require('express');
-
+const path = require('path');
 const AppError = require('./utils/appError');
 const globalErrorHandling = require('./controller/errorController');
 
