@@ -17,6 +17,7 @@ Berikut adalah versi yang dirapikan dan diformat secara profesional dari dokumen
 {
   "name": "John Doe",
   "email": "johndoe@example.com",
+  "role": "pasien",
   "password": "yourpassword"
 }
 ```
