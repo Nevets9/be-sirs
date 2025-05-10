@@ -45,9 +45,12 @@ exports.login = catchAsync(async (req, res, next) => {
 
   //3, everthing is ok, send token to client
   const token = signToken(user._id);
-  
+
+  user.password = undefined;
+
   res.status(200).json({
     status: 'success',
     token,
+    data: user,
   });
 });
