@@ -6,7 +6,7 @@
 
 ## 🔐 Authentication
 
-### POST `https://be-sirs.vercel.app/api/v1/auth/signup`
+### POST `https://be-sirs.vercel.app/api/v1/users/signup`
 
 **Description:** Register a new user (default role: pasien)
 
@@ -26,7 +26,7 @@
 
 ---
 
-### POST `https://be-sirs.vercel.app/api/v1/auth/login`
+### POST `https://be-sirs.vercel.app/api/v1/users/login`
 
 **Description:** Login user
 
