@@ -15,7 +15,8 @@
 ```json
 {
   "email": "steven@gmail.com",
-  "password": "asdasd"
+  "password": "asdasd",
+  "nama": "steven"
 }
 ```
 
@@ -24,10 +25,11 @@
 ```json
 {
   "message": "Pasien berhasil didaftarkan",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MjBlNzE5NGQ4MDkyYWM3NDljOWU1OSIsImlhdCI6MTc0Njk4Njc3NywiZXhwIjoxNzQ2OTg3Mjc3fQ.LhuQgDrKMBgKhvpzgpXqs47FhzYfhqVggTJ2wlCocMc",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MjBmMjU5MTA5MzcwZjVjZWUwODAzMyIsImlhdCI6MTc0Njk4OTY1NywiZXhwIjoxNzQ2OTkwMTU3fQ.N_M09H3NR7aykcYxSC6oHLVjUnLN9TSeYkMXhpKFu0U",
   "pasien": {
-    "id": "6820e7194d8092ac749c9e59",
-    "email": "steven@gmail.com"
+    "id": "6820f259109370f5cee08033",
+    "email": "steven2@gmail.com",
+    "nama": "steven2"
   }
 }
 ```
@@ -36,7 +38,7 @@
 
 ### POST `https://be-sirs.vercel.app/api/v1/users/login`
 
-**Description:** Login user
+**Description:** Login Pasien
 
 **Body:**
 
@@ -49,19 +51,17 @@
 }
 ```
 
-**Response:**
-
 **Description:** Login Dokter
 
 ```json
 {
   "message": "Login berhasil",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MjBlMWI2ZWMzODVlNWQzYTUzYmJhNyIsImlhdCI6MTc0Njk4NjU4MCwiZXhwIjoxNzQ2OTg3MDgwfQ.M_mOZTJxsToQx48yhElWfBqLS2se4isIJL-p47Lqflk",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MjBmMTVjYmM4MGMwNTAwMjRkNTFlMyIsImlhdCI6MTc0Njk4OTgzOCwiZXhwIjoxNzQ2OTkwMzM4fQ.9m778NMeI_s5ROKUPcQvzW9Dp8CUxnGydCJ9aUIbf_k",
   "user": {
-    "_id": "6820e1b6ec385e5d3a53bba7",
+    "_id": "6820f15cbc80c050024d51e3",
+    "nama": "Dr. Tirta",
     "dokterInfo": {
-      "namaDokter": "Dr. Andi Wijaya",
-      "spesialisasi": "Spesialis Penyakit Dalam"
+      "spesialisasi": "Umum"
     },
     "__v": 0
   }
@@ -74,9 +74,10 @@
 ```json
 {
   "message": "Login berhasil",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MjBlNzE5NGQ4MDkyYWM3NDljOWU1OSIsImlhdCI6MTc0Njk4Nzk0NiwiZXhwIjoxNzQ2OTg4NDQ2fQ.6PLA-qFifm3a2tj_GiaaZ2YEO80ifILM2lvycRE0EtU",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MjBmMGU0MzBhY2Y2OGE2ZGJhZTliNiIsImlhdCI6MTc0Njk4OTc4MCwiZXhwIjoxNzQ2OTkwMjgwfQ.mfcoE6VygCtNNpqbFS3Yb0SZdX52aDmCxfuIABEBSCc",
   "user": {
-    "_id": "6820e7194d8092ac749c9e59",
+    "_id": "6820f0e430acf68a6dbae9b6",
+    "nama": "steven",
     "__v": 0
   }
 }
@@ -95,19 +96,20 @@
   "status": "success",
   "data": [
     {
-      "_id": "6820e69de3d7be2684775223",
-      "email": "tirta@gmail.com",
-      "role": "dokter",
-      "dokterInfo": {
-        "namaDokter": "Dr. Tirta",
-        "spesialisasi": "Umum"
-      },
+      "_id": "6820f0e430acf68a6dbae9b6",
+      "nama": "steven",
+      "email": "steven@gmail.com",
+      "role": "pasien",
       "__v": 0
     },
     {
-      "_id": "6820e7194d8092ac749c9e59",
-      "email": "steven@gmail.com",
-      "role": "pasien",
+      "_id": "6820f15cbc80c050024d51e3",
+      "nama": "Dr. Tirta",
+      "email": "tirta@gmail.com",
+      "role": "dokter",
+      "dokterInfo": {
+        "spesialisasi": "Umum"
+      },
       "__v": 0
     }
   ]
@@ -122,9 +124,13 @@
 {
   "status": "success",
   "data": {
-    "_id": "6820e7194d8092ac749c9e59",
-    "email": "steven@gmail.com",
-    "role": "pasien",
+    "_id": "6820f15cbc80c050024d51e3",
+    "nama": "Dr. Tirta",
+    "email": "tirta@gmail.com",
+    "role": "dokter",
+    "dokterInfo": {
+      "spesialisasi": "Umum"
+    },
     "__v": 0
   }
 }
@@ -152,9 +158,9 @@
 
 ```json
 {
-  "email": "tirta@gmail.com",
+  "email": "tirta2@gmail.com",
   "password": "asdasd",
-  "namaDokter": "Dr. Tirta",
+  "nama": "Dr. Tirta2",
   "spesialisasi": "Umum"
 }
 ```
@@ -165,9 +171,9 @@
 {
   "message": "Dokter berhasil didaftarkan",
   "dokter": {
-    "id": "6820e69de3d7be2684775223",
-    "email": "tirta@gmail.com",
-    "namaDokter": "Dr. Tirta",
+    "id": "6820f29c2703ebf2008219a3",
+    "email": "tirta2@gmail.com",
+    "nama": "Dr. Tirta2",
     "spesialisasi": "Umum"
   }
 }
@@ -182,11 +188,11 @@
   "status": "success",
   "data": [
     {
-      "_id": "6820e69de3d7be2684775223",
+      "_id": "6820f15cbc80c050024d51e3",
+      "nama": "Dr. Tirta",
       "email": "tirta@gmail.com",
       "role": "dokter",
       "dokterInfo": {
-        "namaDokter": "Dr. Tirta",
         "spesialisasi": "Umum"
       },
       "__v": 0
@@ -202,9 +208,9 @@
 ```json
 {
   "message": "success",
-  "id": "6820e69de3d7be2684775223",
+  "id": "6820f15cbc80c050024d51e3",
   "email": "tirta@gmail.com",
-  "namaDokter": "Dr. Tirta",
+  "nama": "Dr. Tirta",
   "spesialisasi": "Umum"
 }
 ```

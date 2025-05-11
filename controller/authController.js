@@ -12,7 +12,11 @@ const signToken = (id) => {
 
 exports.signup = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, nama } = req.body;
+
+    if (!email || !password || !nama) {
+      return res.status(400).json({ message: 'Semua data harus terisi' });
+    }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -22,6 +26,7 @@ exports.signup = async (req, res) => {
     const newUser = new User({
       email,
       password,
+      nama,
       role: 'pasien',
     });
 
@@ -34,6 +39,7 @@ exports.signup = async (req, res) => {
       pasien: {
         id: newUser._id,
         email: newUser.email,
+        nama: newUser.nama,
       },
     });
   } catch (err) {

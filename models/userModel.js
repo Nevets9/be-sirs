@@ -4,10 +4,6 @@ const bcrypt = require('bcryptjs');
 
 const dokterSchema = new mongoose.Schema(
   {
-    namaDokter: {
-      type: String,
-      required: true,
-    },
     spesialisasi: {
       type: String,
       required: true,
@@ -17,6 +13,10 @@ const dokterSchema = new mongoose.Schema(
 );
 
 const userSchema = new mongoose.Schema({
+  nama: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     required: true,

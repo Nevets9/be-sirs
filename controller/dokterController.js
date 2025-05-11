@@ -13,7 +13,7 @@ exports.getAllDokters = async (req, res) => {
 
 exports.createDokter = async (req, res) => {
   try {
-    const { email, password, namaDokter, spesialisasi } = req.body;
+    const { email, password, nama, spesialisasi } = req.body;
 
     // Cek apakah user sudah ada
     const existingUser = await User.findOne({ email });
@@ -23,10 +23,10 @@ exports.createDokter = async (req, res) => {
 
     const newUser = new User({
       email,
+      nama,
       password,
       role: 'dokter',
       dokterInfo: {
-        namaDokter,
         spesialisasi,
       },
     });
@@ -38,7 +38,7 @@ exports.createDokter = async (req, res) => {
       dokter: {
         id: newUser._id,
         email: newUser.email,
-        namaDokter,
+        nama: newUser.nama,
         spesialisasi,
       },
     });
@@ -62,7 +62,7 @@ exports.getDokterById = async (req, res) => {
       message: 'success',
       id: user._id,
       email: user.email,
-      namaDokter: user.dokterInfo.namaDokter,
+      nama: user.nama,
       spesialisasi: user.dokterInfo.spesialisasi,
     });
   } catch (err) {
