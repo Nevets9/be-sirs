@@ -1,46 +1,102 @@
 const JanjiTemu = require('../models/janjiTemuModel');
-const catchAsync = require('../utils/catchAsync');
+const User = require('../models/userModel');
 
-exports.getAllJanjiTemu = catchAsync(async (req, res) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+exports.getAllJanjiTemu = async (req, res) => {
+  try {
+    const janjiTemu = await JanjiTemu.find()
+      .populate('pasien.idPasien', 'nama email') // Populate data pasien
+      .populate('dokter.idDokter', 'namaDokter spesialisasi') // Populate data dokter
+      .select('-__v'); // Menghindari field __v yang digunakan untuk versioning di MongoDB
 
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
+    res.status(200).json({
+      status: 'success',
+      result: janjiTemu.length,
+      data: janjiTemu,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: 'Gagal mengambil daftar janji temu',
+      error: err.message,
+    });
+  }
+};
 
-  const janji = await JanjiTemu.find({
-    tanggal: { $gte: today, $lt: tomorrow },
-  });
+exports.createJanjiTemu = async (req, res) => {
+  try {
+    const {
+      idPasien,
+      namaPasien,
+      nik,
+      umur,
+      alamat,
+      noHp,
+      idDokter,
+      keluhan,
+      tanggal,
+    } = req.body;
 
-  res.status(200).json({
-    message: 'success',
-    data: janji,
-  });
-});
+    // Validasi apakah pasien dan dokter ada
+    const pasien = await User.findById(idPasien);
+    const dokter = await User.findById(idDokter);
 
-exports.createJanjiTemu = catchAsync(async (req, res) => {
-  const janji = await JanjiTemu.create(req.body);
+    if (!pasien || pasien.role !== 'pasien') {
+      return res.status(404).json({ message: 'Pasien tidak ditemukan' });
+    }
 
-  res.status(201).json({
-    message: 'success',
-    data: janji,
-  });
-});
+    if (!dokter || dokter.role !== 'dokter') {
+      return res.status(404).json({ message: 'Dokter tidak ditemukan' });
+    }
 
-exports.getJanjiTemuById = catchAsync(async (req, res) => {
-  const janji = await JanjiTemu.findById(req.params.id);
-  res.status(200).json({ data: janji });
-});
+    const newJanjiTemu = new JanjiTemu({
+      pasien: {
+        idPasien,
+        namaPasien,
+        nik,
+        umur,
+        alamat,
+        noHp,
+      },
+      dokter: {
+        idDokter,
+      },
+      keluhan,
+      tanggal,
+    });
 
-exports.updateJanjiTemu = catchAsync(async (req, res) => {
-  const janji = await JanjiTemu.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  res.status(200).json({ data: janji });
-});
+    await newJanjiTemu.save();
 
-exports.deleteJanjiTemu = catchAsync(async (req, res) => {
-  await JanjiTemu.findByIdAndDelete(req.params.id);
-  res.status(204).json({ status: 'success', data: null });
-});
+    res.status(201).json({
+      message: 'Janji temu berhasil dibuat',
+      data: newJanjiTemu,
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'Gagal membuat janji temu', error: err.message });
+  }
+};
+
+exports.getJanjiTemuById = async (req, res) => {
+  try {
+    const { id } = req.params; // Ambil ID dari parameter URL
+
+    const janjiTemu = await JanjiTemu.findById(id)
+      .populate('pasien.idPasien', 'nama email') // Populate data pasien
+      .populate('dokter.idDokter', 'namaDokter spesialisasi') // Populate data dokter
+      .select('-__v'); // Menghindari field __v yang digunakan untuk versioning di MongoDB
+
+    if (!janjiTemu) {
+      return res.status(404).json({ message: 'Janji temu tidak ditemukan' });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      data: janjiTemu,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: 'Gagal mengambil janji temu',
+      error: err.message,
+    });
+  }
+};

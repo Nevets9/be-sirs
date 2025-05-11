@@ -1,41 +1,91 @@
-const Dokter = require('../models/dokterModel');
-const catchAsync = require('../utils/catchAsync');
+const User = require('../models/userModel');
 
-exports.getAllDokter = catchAsync(async (req, res) => {
-  const dokter = await Dokter.find().populate('user', 'name email');
-  res.status(200).json({
-    message: 'success',
-    data: dokter,
-  });
-});
+exports.getAllDokters = async (req, res) => {
+  try {
+    const dokterList = await User.find({ role: 'dokter' }).select('-password');
+    res.status(200).json({ status: 'success', data: dokterList });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'Gagal mengambil daftar dokter', error: err.message });
+  }
+};
 
-exports.createDokter = catchAsync(async (req, res) => {
-  const newDokter = await Dokter.create({
-    user: req.body.user,
-    spesialisasi: req.body.spesialisasi,
-    poli: req.body.poli,
-  });
+exports.createDokter = async (req, res) => {
+  try {
+    const { email, password, namaDokter, spesialisasi } = req.body;
 
-  res.status(201).json({
-    message: 'Success',
-    data: newDokter,
-  });
-});
+    // Cek apakah user sudah ada
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email sudah terdaftar' });
+    }
 
-exports.getDokterById = catchAsync(async (req, res) => {
-  const dokter = await Dokter.findById(req.params.id);
-  res.status(200).json({ data: dokter });
-});
+    const newUser = new User({
+      email,
+      password,
+      role: 'dokter',
+      dokterInfo: {
+        namaDokter,
+        spesialisasi,
+      },
+    });
 
-exports.updateDokter = catchAsync(async (req, res) => {
-  const dokter = await Dokter.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  res.status(200).json({ data: dokter });
-});
+    await newUser.save();
 
-exports.deleteDokter = catchAsync(async (req, res) => {
-  await Dokter.findByIdAndDelete(req.params.id);
-  res.status(204).json({ status: 'success', data: null });
-});
+    res.status(201).json({
+      message: 'Dokter berhasil didaftarkan',
+      dokter: {
+        id: newUser._id,
+        email: newUser.email,
+        namaDokter,
+        spesialisasi,
+      },
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'Gagal create dokter', error: err.message });
+  }
+};
+
+// ✅ GET PROFILE DOKTER
+exports.getDokterById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(403).json({ message: 'Tidak ditemukan' });
+    }
+
+    res.status(200).json({
+      message: 'success',
+      id: user._id,
+      email: user.email,
+      namaDokter: user.dokterInfo.namaDokter,
+      spesialisasi: user.dokterInfo.spesialisasi,
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'Gagal mengambil profil dokter', error: err.message });
+  }
+};
+
+exports.deleteDokter = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await User.findOneAndDelete({ _id: id, role: 'dokter' });
+
+    if (!deleted) {
+      return res.status(404).json({ message: 'Dokter tidak ditemukan' });
+    }
+
+    res.status(200).json({ message: 'Akun dokter berhasil dihapus' });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'Gagal menghapus dokter', error: err.message });
+  }
+};

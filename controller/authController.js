@@ -10,30 +10,45 @@ const signToken = (id) => {
   });
 };
 
-exports.signup = catchAsync(async (req, res, next) => {
-  const newUser = await User.create({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-  });
+exports.signup = async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
-  const token = signToken(newUser._id);
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email sudah digunakan' });
+    }
 
-  res.status(201).json({
-    status: 'success',
-    token,
-    data: {
-      user: newUser,
-    },
-  });
-});
+    const newUser = new User({
+      email,
+      password,
+      role: 'pasien',
+    });
+
+    await newUser.save();
+
+    const token = signToken(newUser._id);
+    res.status(201).json({
+      message: 'Pasien berhasil didaftarkan',
+      token,
+      pasien: {
+        id: newUser._id,
+        email: newUser.email,
+      },
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'Gagal register pasien', error: err.message });
+  }
+};
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
   //1. check email password
   if (!email || !password) {
-    return next(new AppError('Please Provide email dan password!', 400));
+    return next(new AppError('Akun tidak ditemukan', 400));
   }
 
   //2. check user exist and password correct
@@ -47,10 +62,12 @@ exports.login = catchAsync(async (req, res, next) => {
   const token = signToken(user._id);
 
   user.password = undefined;
+  user.email = undefined;
+  user.role = undefined;
 
   res.status(200).json({
-    status: 'success',
+    message: 'Login berhasil',
     token,
-    data: user,
+    user,
   });
 });

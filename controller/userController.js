@@ -2,33 +2,30 @@ const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
+  const pasienList = await User.find().select('-password');
   res.status(200).json({
     status: 'success',
-    result: users.length,
-    data: {
-      users,
-    },
+    data: pasienList,
   });
 });
 
 exports.getUserById = catchAsync(async (req, res) => {
   const user = await User.findById(req.params.id);
-  res.status(200).json({ data: user });
-});
 
-exports.updateUser = catchAsync(async (req, res) => {
-  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
+  user.password = undefined;
+  res.status(200).json({
+    status: 'success',
+    data: user,
   });
-  res.status(200).json({ data: user });
 });
 
 exports.deleteUser = catchAsync(async (req, res) => {
-  const user = await User.findByIdAndDelete(req.params.id);
-  if (!user) {
-    return res.status(404).json({ message: 'User tidak ditemukan' });
+  const { id } = req.params;
+  const deletedUser = await User.findOneAndDelete({ _id: id, role: 'pasien' });
+
+  if (!deletedUser) {
+    return res.status(404).json({ message: 'Akun tidak ditemukan' });
   }
-  res.status(200).json({ message: 'User berhasil dihapus' });
+
+  res.status(200).json({ message: 'Akun pasien berhasil dihapus' });
 });

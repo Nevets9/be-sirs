@@ -2,29 +2,41 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Nama harus diisi!'],
+const dokterSchema = new mongoose.Schema(
+  {
+    namaDokter: {
+      type: String,
+      required: true,
+    },
+    spesialisasi: {
+      type: String,
+      required: true,
+    },
   },
+  { _id: false }
+);
+
+const userSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: [true, 'Email harus diisi!'],
+    required: true,
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, 'Format email tidak valid!'],
-  },
-  role: {
-    type: String,
-    default: 'pasien',
-    enum: ['dokter', 'pasien', 'admin'],
-    required: [true, 'Role harus diisi!'],
   },
   password: {
     type: String,
-    required: [true, 'Password harus diisi!'],
-    minLength: 6,
-    select: false,
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: ['pasien', 'dokter'],
+    default: 'pasien',
+  },
+  dokterInfo: {
+    type: dokterSchema,
+    required: function () {
+      return this.role === 'dokter';
+    },
   },
 });
 
@@ -41,7 +53,7 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.correctPassword = async function (
   candidatePassword,
-  userPassword,
+  userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };

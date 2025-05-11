@@ -14,15 +14,23 @@
 
 ```json
 {
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "password123"
+  "email": "steven@gmail.com",
+  "password": "asdasd"
 }
 ```
 
 **Response:**
 
-* 201 Created + JWT token
+```json
+{
+  "message": "Pasien berhasil didaftarkan",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MjBlNzE5NGQ4MDkyYWM3NDljOWU1OSIsImlhdCI6MTc0Njk4Njc3NywiZXhwIjoxNzQ2OTg3Mjc3fQ.LhuQgDrKMBgKhvpzgpXqs47FhzYfhqVggTJ2wlCocMc",
+  "pasien": {
+    "id": "6820e7194d8092ac749c9e59",
+    "email": "steven@gmail.com"
+  }
+}
+```
 
 ---
 
@@ -34,14 +42,45 @@
 
 ```json
 {
-  "email": "john@example.com",
-  "password": "password123"
+  "email": "dokter1@example.com",
+  "password": "dokter123"
+  // "email": "steven@gmail.com",
+  // "password": "asdasd"
 }
 ```
 
 **Response:**
 
-* 200 OK + JWT token
+**Description:** Login Dokter
+
+```json
+{
+  "message": "Login berhasil",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MjBlMWI2ZWMzODVlNWQzYTUzYmJhNyIsImlhdCI6MTc0Njk4NjU4MCwiZXhwIjoxNzQ2OTg3MDgwfQ.M_mOZTJxsToQx48yhElWfBqLS2se4isIJL-p47Lqflk",
+  "user": {
+    "_id": "6820e1b6ec385e5d3a53bba7",
+    "dokterInfo": {
+      "namaDokter": "Dr. Andi Wijaya",
+      "spesialisasi": "Spesialis Penyakit Dalam"
+    },
+    "__v": 0
+  }
+}
+```
+
+**Response:**
+**Description:** Login Pasien
+
+```json
+{
+  "message": "Login berhasil",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MjBlNzE5NGQ4MDkyYWM3NDljOWU1OSIsImlhdCI6MTc0Njk4Nzk0NiwiZXhwIjoxNzQ2OTg4NDQ2fQ.6PLA-qFifm3a2tj_GiaaZ2YEO80ifILM2lvycRE0EtU",
+  "user": {
+    "_id": "6820e7194d8092ac749c9e59",
+    "__v": 0
+  }
+}
+```
 
 ---
 
@@ -49,61 +88,140 @@
 
 ### GET `https://be-sirs.vercel.app/api/v1/users`
 
-**Admin only:** Get all users
+**Response:**
+
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "_id": "6820e69de3d7be2684775223",
+      "email": "tirta@gmail.com",
+      "role": "dokter",
+      "dokterInfo": {
+        "namaDokter": "Dr. Tirta",
+        "spesialisasi": "Umum"
+      },
+      "__v": 0
+    },
+    {
+      "_id": "6820e7194d8092ac749c9e59",
+      "email": "steven@gmail.com",
+      "role": "pasien",
+      "__v": 0
+    }
+  ]
+}
+```
 
 ### GET `https://be-sirs.vercel.app/api/v1/users/:id`
 
-**Admin only:** Get user by ID
+**Response:**
 
-### PATCH `https://be-sirs.vercel.app/api/v1/users/:id`
-
-**Admin only:** Update user by ID
+```json
+{
+  "status": "success",
+  "data": {
+    "_id": "6820e7194d8092ac749c9e59",
+    "email": "steven@gmail.com",
+    "role": "pasien",
+    "__v": 0
+  }
+}
+```
 
 ### DELETE `https://be-sirs.vercel.app/api/v1/users/:id`
 
-**Admin only:** Delete user by ID
+**Response:**
+
+```json
+{
+  "message": "Akun tidak ditemukan"
+}
+```
 
 ---
 
 ## 🩺 Dokter Management
 
-### POST `https://be-sirs.vercel.app/api/v1/dokter`
+### POST `https://be-sirs.vercel.app/api/v1/doctors`
 
-**Admin only:** Tambahkan dokter dengan spesialisasi dan poli
+**Admin only:** Tambahkan dokter dengan spesialisasi
 
 **Body:**
 
 ```json
 {
-  "name": "Dr. Ani",
-  "email": "ani@example.com",
-  "password": "123456",
-  "spesialis": "Anak",
-  "poli": "Poli Anak"
+  "email": "tirta@gmail.com",
+  "password": "asdasd",
+  "namaDokter": "Dr. Tirta",
+  "spesialisasi": "Umum"
 }
 ```
 
-### GET `https://be-sirs.vercel.app/api/v1/dokter`
+**Response:**
 
-**Public:** Lihat semua dokter
+```json
+{
+  "message": "Dokter berhasil didaftarkan",
+  "dokter": {
+    "id": "6820e69de3d7be2684775223",
+    "email": "tirta@gmail.com",
+    "namaDokter": "Dr. Tirta",
+    "spesialisasi": "Umum"
+  }
+}
+```
 
-### GET `https://be-sirs.vercel.app/api/v1/dokter/:id`
+### GET `https://be-sirs.vercel.app/api/v1/doctors`
 
-**Admin:** Get 1 dokter
+**Response:**
 
-### PATCH `https://be-sirs.vercel.app/api/v1/dokter/:id`
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "_id": "6820e69de3d7be2684775223",
+      "email": "tirta@gmail.com",
+      "role": "dokter",
+      "dokterInfo": {
+        "namaDokter": "Dr. Tirta",
+        "spesialisasi": "Umum"
+      },
+      "__v": 0
+    }
+  ]
+}
+```
 
-**Admin:** Update dokter
+### GET `https://be-sirs.vercel.app/api/v1/doctors/:id`
 
-### DELETE `https://be-sirs.vercel.app/api/v1/dokter/:id`
+**Response:**
 
-**Admin:** Hapus dokter
+```json
+{
+  "message": "success",
+  "id": "6820e69de3d7be2684775223",
+  "email": "tirta@gmail.com",
+  "namaDokter": "Dr. Tirta",
+  "spesialisasi": "Umum"
+}
+```
+
+### DELETE `https://be-sirs.vercel.app/api/v1/doctors/:id`
+
+```json
+{
+  "message": "Akun dokter berhasil dihapus"
+}
+```
 
 ---
 
 ## 📅 Janji Temu
 
-### POST `https://be-sirs.vercel.app/api/v1/janji-temu`
+### POST `https://be-sirs.vercel.app/api/v1/janjiTemu`
 
 **Pasien only:** Buat janji temu
 
@@ -111,31 +229,137 @@
 
 ```json
 {
-  "umur": 22,
-  "dokter": "{dokterId}",
-  "keluhan": "Demam dan batuk",
-  "tanggal": "2025-05-10"
+  "idPasien": "6820e7194d8092ac749c9e59",
+  "namaPasien": "John Doe",
+  "nik": "1234567890",
+  "umur": 30,
+  "alamat": "Jl. Merdeka No. 123, Jakarta",
+  "noHp": "081234567890",
+  "idDokter": "6820e69de3d7be2684775223",
+  "keluhan": "Mual DIare",
+  "tanggal": "2025-05-12T10:00:00.000Z"
 }
 ```
 
-### GET `https://be-sirs.vercel.app/api/v1/janji-temu`
+**Response:**
 
-**Admin/Dokter:** Lihat semua janji temu hari ini
+```json
+{
+  "message": "Janji temu berhasil dibuat",
+  "data": {
+    "pasien": {
+      "idPasien": "6820e7194d8092ac749c9e59",
+      "namaPasien": "John Doe",
+      "nik": "1234567890",
+      "umur": 30,
+      "alamat": "Jl. Merdeka No. 123, Jakarta",
+      "noHp": "081234567890"
+    },
+    "dokter": {
+      "idDokter": "6820e69de3d7be2684775223"
+    },
+    "keluhan": "Mual DIare",
+    "tanggal": "2025-05-12T10:00:00.000Z",
+    "_id": "6820eaa05aa5531cf474850c",
+    "createdAt": "2025-05-11T18:21:20.435Z",
+    "updatedAt": "2025-05-11T18:21:20.435Z",
+    "__v": 0
+  }
+}
+```
 
-* Admin: lihat semua data
-* Dokter: hanya nama-nama pasien
+### GET `https://be-sirs.vercel.app/api/v1/janjiTemu`
+
+**Response:**
+
+```json
+{
+  "status": "success",
+  "result": 2,
+  "data": [
+    {
+      "pasien": {
+        "idPasien": {
+          "_id": "6820e7194d8092ac749c9e59",
+          "email": "steven@gmail.com"
+        },
+        "namaPasien": "John Doe",
+        "nik": "1234567890",
+        "umur": 30,
+        "alamat": "Jl. Merdeka No. 123, Jakarta",
+        "noHp": "081234567890"
+      },
+      "dokter": {
+        "idDokter": {
+          "_id": "6820e69de3d7be2684775223"
+        }
+      },
+      "_id": "6820ea2a27e1037d8d455df9",
+      "keluhan": "Sakit kepala dan demam tinggi",
+      "tanggal": "2025-05-12T10:00:00.000Z",
+      "createdAt": "2025-05-11T18:19:22.858Z",
+      "updatedAt": "2025-05-11T18:19:22.858Z"
+    },
+    {
+      "pasien": {
+        "idPasien": {
+          "_id": "6820e7194d8092ac749c9e59",
+          "email": "steven@gmail.com"
+        },
+        "namaPasien": "John Doe",
+        "nik": "1234567890",
+        "umur": 30,
+        "alamat": "Jl. Merdeka No. 123, Jakarta",
+        "noHp": "081234567890"
+      },
+      "dokter": {
+        "idDokter": {
+          "_id": "6820e69de3d7be2684775223"
+        }
+      },
+      "_id": "6820eaa05aa5531cf474850c",
+      "keluhan": "Mual DIare",
+      "tanggal": "2025-05-12T10:00:00.000Z",
+      "createdAt": "2025-05-11T18:21:20.435Z",
+      "updatedAt": "2025-05-11T18:21:20.435Z"
+    }
+  ]
+}
+```
 
 ### GET `https://be-sirs.vercel.app/api/v1/janji-temu/:id`
 
 **Get 1 janji temu**
+**Response:**
 
-### PATCH `https://be-sirs.vercel.app/api/v1/janji-temu/:id`
-
-**Update janji temu**
-
-### DELETE `https://be-sirs.vercel.app/api/v1/janji-temu/:id`
-
-**Hapus janji temu**
+```json
+{
+  "status": "success",
+  "data": {
+    "pasien": {
+      "idPasien": {
+        "_id": "6820e7194d8092ac749c9e59",
+        "email": "steven@gmail.com"
+      },
+      "namaPasien": "John Doe",
+      "nik": "1234567890",
+      "umur": 30,
+      "alamat": "Jl. Merdeka No. 123, Jakarta",
+      "noHp": "081234567890"
+    },
+    "dokter": {
+      "idDokter": {
+        "_id": "6820e69de3d7be2684775223"
+      }
+    },
+    "_id": "6820ea2a27e1037d8d455df9",
+    "keluhan": "Sakit kepala dan demam tinggi",
+    "tanggal": "2025-05-12T10:00:00.000Z",
+    "createdAt": "2025-05-11T18:19:22.858Z",
+    "updatedAt": "2025-05-11T18:19:22.858Z"
+  }
+}
+```
 
 ---
 
@@ -189,7 +413,7 @@
 
 ## 🛡️ Authorization Middleware
 
-* Tambahkan `Authorization: Bearer <token>` di header semua endpoint yang butuh autentikasi
+- Tambahkan `Authorization: Bearer <token>` di header semua endpoint yang butuh autentikasi
 
 ---
 

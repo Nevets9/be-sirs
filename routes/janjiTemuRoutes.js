@@ -6,10 +6,6 @@ router
   .route('/')
   .get(janjiTemuController.getAllJanjiTemu)
   .post(janjiTemuController.createJanjiTemu);
-router
-  .route('/:id')
-  .get(janjiTemuController.getJanjiTemuById)
-  .patch(janjiTemuController.updateJanjiTemu)
-  .delete(janjiTemuController.deleteJanjiTemu);
+router.route('/:id').get(janjiTemuController.getJanjiTemuById);
 
 module.exports = router;
