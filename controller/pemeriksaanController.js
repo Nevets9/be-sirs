@@ -1,36 +1,65 @@
 const Pemeriksaan = require('../models/pemeriksaanModel');
-const catchAsync = require('../utils/catchAsync');
+const JanjiTemu = require('../models/janjiTemuModel');
 
-exports.getAllPemeriksaan = catchAsync(async (req, res) => {
-  const periksa = await Pemeriksaan.find();
-  res.status(200).json({
-    message: 'success',
-    data: periksa,
-  });
-});
+// Create pemeriksaan
+exports.createPemeriksaan = async (req, res) => {
+  try {
+    const { janjiTemu, analisa, resepObat } = req.body;
 
-exports.periksaPasien = catchAsync(async (req, res) => {
-  const periksa = await Pemeriksaan.create(req.body);
-  res.status(201).json({
-    message: 'Success',
-    data: periksa,
-  });
-});
+    // Pastikan janji temu tersedia
+    const janji = await JanjiTemu.findById(janjiTemu);
+    if (!janji) {
+      return res.status(404).json({ message: 'Janji temu tidak ditemukan' });
+    }
 
-exports.getPemeriksaanById = catchAsync(async (req, res) => {
-  const periksa = await Pemeriksaan.findById(req.params.id);
-  res.status(200).json({ data: periksa });
-});
+    const pemeriksaanBaru = new Pemeriksaan({
+      janjiTemu,
+      analisa,
+      resepObat,
+    });
 
-exports.updatePemeriksaan = catchAsync(async (req, res) => {
-  const periksa = await Pemeriksaan.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  res.status(200).json({ data: periksa });
-});
+    await pemeriksaanBaru.save();
 
-exports.deletePemeriksaan = catchAsync(async (req, res) => {
-  await Pemeriksaan.findByIdAndDelete(req.params.id);
-  res.status(204).json({ status: 'success', data: null });
-});
+    res.status(201).json({
+      message: 'Pemeriksaan berhasil dibuat',
+      data: pemeriksaanBaru,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: 'Gagal membuat pemeriksaan',
+      error: err.message,
+    });
+  }
+};
+
+// Get all pemeriksaan
+exports.getAllPemeriksaan = async (req, res) => {
+  try {
+    const data = await Pemeriksaan.find().populate('janjiTemu');
+    res.status(200).json({ message: 'Success', data });
+  } catch (err) {
+    res.status(500).json({
+      message: 'Gagal mengambil daftar pemeriksaan',
+      error: err.message,
+    });
+  }
+};
+
+// Get pemeriksaan by ID
+exports.getPemeriksaanById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pemeriksaan = await Pemeriksaan.findById(id).populate('janjiTemu');
+
+    if (!pemeriksaan) {
+      return res.status(404).json({ message: 'Pemeriksaan tidak ditemukan' });
+    }
+
+    res.status(200).json({ message: 'Success', data: pemeriksaan });
+  } catch (err) {
+    res.status(500).json({
+      message: 'Gagal mengambil detail pemeriksaan',
+      error: err.message,
+    });
+  }
+};

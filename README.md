@@ -333,7 +333,7 @@
 }
 ```
 
-### GET `https://be-sirs.vercel.app/api/v1/janji-temu/:id`
+### GET `https://be-sirs.vercel.app/api/v1/janjiTemu/:id`
 
 **Get 1 janji temu**
 **Response:**
@@ -371,7 +371,7 @@
 
 ## 🧾 Pemeriksaan Pasien
 
-### POST `https://be-sirs.vercel.app/api/v1/periksa`
+### POST `https://be-sirs.vercel.app/api/v1/pemeriksaan`
 
 **Dokter only:** Input hasil pemeriksaan pasien
 
@@ -379,29 +379,104 @@
 
 ```json
 {
-  "namaPasien": "John Doe",
-  "umur": 23,
-  "namaDokter": "Dr. Ani",
-  "analisa": "Infeksi saluran pernapasan",
-  "resep": "Paracetamol 3x sehari"
+  "janjiTemu": "6820ea2a27e1037d8d455df9",
+  "analisa": "Pasien mengalami demam tinggi selama 3 hari, kemungkinan infeksi virus.",
+  "resepObat": "Paracetamol 500mg, diminum 3 kali sehari setelah makan"
 }
 ```
 
-### GET `https://be-sirs.vercel.app/api/v1/periksa`
+**Response:**
 
-**All:** Lihat riwayat pemeriksaan semua pasien
+```json
+{
+  "message": "Pemeriksaan berhasil dibuat",
+  "data": {
+    "janjiTemu": "6820ea2a27e1037d8d455df9",
+    "analisa": "Pasien mengalami demam tinggi selama 3 hari, kemungkinan infeksi virus.",
+    "resepObat": "Paracetamol 500mg, diminum 3 kali sehari setelah makan",
+    "_id": "6820f76dbf8df6359cdfb09e",
+    "createdAt": "2025-05-11T19:15:57.308Z",
+    "updatedAt": "2025-05-11T19:15:57.308Z",
+    "__v": 0
+  }
+}
+```
 
-### GET `https://be-sirs.vercel.app/api/v1/periksa/:id`
+### GET `https://be-sirs.vercel.app/api/v1/pemeriksaan`
 
-**Get 1 data pemeriksaan**
+**Response:**
 
-### PATCH `https://be-sirs.vercel.app/api/v1/periksa/:id`
+```json
+{
+  "message": "Success",
+  "data": [
+    {
+      "_id": "6820f76dbf8df6359cdfb09e",
+      "janjiTemu": {
+        "pasien": {
+          "idPasien": "6820e7194d8092ac749c9e59",
+          "namaPasien": "John Doe",
+          "nik": "1234567890",
+          "umur": 30,
+          "alamat": "Jl. Merdeka No. 123, Jakarta",
+          "noHp": "081234567890"
+        },
+        "dokter": {
+          "idDokter": "6820e69de3d7be2684775223"
+        },
+        "_id": "6820ea2a27e1037d8d455df9",
+        "keluhan": "Sakit kepala dan demam tinggi",
+        "tanggal": "2025-05-12T10:00:00.000Z",
+        "createdAt": "2025-05-11T18:19:22.858Z",
+        "updatedAt": "2025-05-11T18:19:22.858Z",
+        "__v": 0
+      },
+      "analisa": "Pasien mengalami demam tinggi selama 3 hari, kemungkinan infeksi virus.",
+      "resepObat": "Paracetamol 500mg, diminum 3 kali sehari setelah makan",
+      "createdAt": "2025-05-11T19:15:57.308Z",
+      "updatedAt": "2025-05-11T19:15:57.308Z",
+      "__v": 0
+    }
+  ]
+}
+```
 
-**Update pemeriksaan**
+### GET `https://be-sirs.vercel.app/api/v1/pemeriksaan/:id`
 
-### DELETE `https://be-sirs.vercel.app/api/v1/periksa/:id`
+**Response:**
 
-**Delete pemeriksaan**
+```json
+{
+  "message": "Success",
+  "data": {
+    "_id": "6820f76dbf8df6359cdfb09e",
+    "janjiTemu": {
+      "pasien": {
+        "idPasien": "6820e7194d8092ac749c9e59",
+        "namaPasien": "John Doe",
+        "nik": "1234567890",
+        "umur": 30,
+        "alamat": "Jl. Merdeka No. 123, Jakarta",
+        "noHp": "081234567890"
+      },
+      "dokter": {
+        "idDokter": "6820e69de3d7be2684775223"
+      },
+      "_id": "6820ea2a27e1037d8d455df9",
+      "keluhan": "Sakit kepala dan demam tinggi",
+      "tanggal": "2025-05-12T10:00:00.000Z",
+      "createdAt": "2025-05-11T18:19:22.858Z",
+      "updatedAt": "2025-05-11T18:19:22.858Z",
+      "__v": 0
+    },
+    "analisa": "Pasien mengalami demam tinggi selama 3 hari, kemungkinan infeksi virus.",
+    "resepObat": "Paracetamol 500mg, diminum 3 kali sehari setelah makan",
+    "createdAt": "2025-05-11T19:15:57.308Z",
+    "updatedAt": "2025-05-11T19:15:57.308Z",
+    "__v": 0
+  }
+}
+```
 
 ---
 

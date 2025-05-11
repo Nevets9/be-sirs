@@ -5,10 +5,6 @@ const pemeriksaanController = require('../controller/pemeriksaanController');
 router
   .route('/')
   .get(pemeriksaanController.getAllPemeriksaan)
-  .post(pemeriksaanController.periksaPasien);
-router
-  .route('/:id')
-  .get(pemeriksaanController.getPemeriksaanById)
-  .patch(pemeriksaanController.updatePemeriksaan)
-  .delete(pemeriksaanController.deletePemeriksaan);
+  .post(pemeriksaanController.createPemeriksaan);
+router.route('/:id').get(pemeriksaanController.getPemeriksaanById);
 module.exports = router;
