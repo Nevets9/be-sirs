@@ -78,7 +78,7 @@ exports.getAllPemeriksaan = async (req, res) => {
 exports.getPemeriksaanById = async (req, res) => {
   try {
     const { id } = req.params;
-    const pemeriksaan = await Pemeriksaan.findById(id).populate('janjiTemu');
+    const pemeriksaan = await Pemeriksaan.findById(id);
 
     if (!pemeriksaan) {
       return res.status(404).json({ message: 'Pemeriksaan tidak ditemukan' });

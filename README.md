@@ -391,7 +391,15 @@
 
 ```json
 {
-  "janjiTemu": "6820ea2a27e1037d8d455df9",
+  "idPasien": "682155987ef776fe77ce552f",
+  "namaPasien": "Rudi taputi",
+  "nik": "1234567890",
+  "umur": 30,
+  "alamat": "Jl. Merdeka No. 123, Jakarta",
+  "noHp": "081234567890",
+  "idDokter": "6820f15cbc80c050024d51e3",
+  "keluhan": "Mual DIare",
+  "tanggal": "2025-05-13T10:00:00.000Z",
   "analisa": "Pasien mengalami demam tinggi selama 3 hari, kemungkinan infeksi virus.",
   "resepObat": "Paracetamol 500mg, diminum 3 kali sehari setelah makan"
 }
@@ -403,12 +411,24 @@
 {
   "message": "Pemeriksaan berhasil dibuat",
   "data": {
-    "janjiTemu": "6820ea2a27e1037d8d455df9",
+    "pasien": {
+      "idPasien": "682155987ef776fe77ce552f",
+      "namaPasien": "Rudi taputi",
+      "nik": "1234567890",
+      "umur": 30,
+      "alamat": "Jl. Merdeka No. 123, Jakarta",
+      "noHp": "081234567890"
+    },
+    "dokter": {
+      "idDokter": "6820f15cbc80c050024d51e3"
+    },
+    "keluhan": "Mual DIare",
+    "tanggal": "2025-05-13T10:00:00.000Z",
     "analisa": "Pasien mengalami demam tinggi selama 3 hari, kemungkinan infeksi virus.",
     "resepObat": "Paracetamol 500mg, diminum 3 kali sehari setelah makan",
-    "_id": "6820f76dbf8df6359cdfb09e",
-    "createdAt": "2025-05-11T19:15:57.308Z",
-    "updatedAt": "2025-05-11T19:15:57.308Z",
+    "_id": "68236c8765953a797f33d8dc",
+    "createdAt": "2025-05-13T16:00:07.760Z",
+    "updatedAt": "2025-05-13T16:00:07.760Z",
     "__v": 0
   }
 }
@@ -423,30 +443,24 @@
   "message": "Success",
   "data": [
     {
-      "_id": "6820f76dbf8df6359cdfb09e",
-      "janjiTemu": {
-        "pasien": {
-          "idPasien": "6820e7194d8092ac749c9e59",
-          "namaPasien": "John Doe",
-          "nik": "1234567890",
-          "umur": 30,
-          "alamat": "Jl. Merdeka No. 123, Jakarta",
-          "noHp": "081234567890"
-        },
-        "dokter": {
-          "idDokter": "6820e69de3d7be2684775223"
-        },
-        "_id": "6820ea2a27e1037d8d455df9",
-        "keluhan": "Sakit kepala dan demam tinggi",
-        "tanggal": "2025-05-12T10:00:00.000Z",
-        "createdAt": "2025-05-11T18:19:22.858Z",
-        "updatedAt": "2025-05-11T18:19:22.858Z",
-        "__v": 0
+      "pasien": {
+        "idPasien": "682155987ef776fe77ce552f",
+        "namaPasien": "Rudi taputi",
+        "nik": "1234567890",
+        "umur": 30,
+        "alamat": "Jl. Merdeka No. 123, Jakarta",
+        "noHp": "081234567890"
       },
+      "dokter": {
+        "idDokter": "6820f15cbc80c050024d51e3"
+      },
+      "_id": "68236c8765953a797f33d8dc",
+      "keluhan": "Mual DIare",
+      "tanggal": "2025-05-13T10:00:00.000Z",
       "analisa": "Pasien mengalami demam tinggi selama 3 hari, kemungkinan infeksi virus.",
       "resepObat": "Paracetamol 500mg, diminum 3 kali sehari setelah makan",
-      "createdAt": "2025-05-11T19:15:57.308Z",
-      "updatedAt": "2025-05-11T19:15:57.308Z",
+      "createdAt": "2025-05-13T16:00:07.760Z",
+      "updatedAt": "2025-05-13T16:00:07.760Z",
       "__v": 0
     }
   ]
@@ -461,30 +475,24 @@
 {
   "message": "Success",
   "data": {
-    "_id": "6820f76dbf8df6359cdfb09e",
-    "janjiTemu": {
-      "pasien": {
-        "idPasien": "6820e7194d8092ac749c9e59",
-        "namaPasien": "John Doe",
-        "nik": "1234567890",
-        "umur": 30,
-        "alamat": "Jl. Merdeka No. 123, Jakarta",
-        "noHp": "081234567890"
-      },
-      "dokter": {
-        "idDokter": "6820e69de3d7be2684775223"
-      },
-      "_id": "6820ea2a27e1037d8d455df9",
-      "keluhan": "Sakit kepala dan demam tinggi",
-      "tanggal": "2025-05-12T10:00:00.000Z",
-      "createdAt": "2025-05-11T18:19:22.858Z",
-      "updatedAt": "2025-05-11T18:19:22.858Z",
-      "__v": 0
+    "pasien": {
+      "idPasien": "682155987ef776fe77ce552f",
+      "namaPasien": "Rudi taputi",
+      "nik": "1234567890",
+      "umur": 30,
+      "alamat": "Jl. Merdeka No. 123, Jakarta",
+      "noHp": "081234567890"
     },
+    "dokter": {
+      "idDokter": "6820f15cbc80c050024d51e3"
+    },
+    "_id": "68236c8765953a797f33d8dc",
+    "keluhan": "Mual DIare",
+    "tanggal": "2025-05-13T10:00:00.000Z",
     "analisa": "Pasien mengalami demam tinggi selama 3 hari, kemungkinan infeksi virus.",
     "resepObat": "Paracetamol 500mg, diminum 3 kali sehari setelah makan",
-    "createdAt": "2025-05-11T19:15:57.308Z",
-    "updatedAt": "2025-05-11T19:15:57.308Z",
+    "createdAt": "2025-05-13T16:00:07.760Z",
+    "updatedAt": "2025-05-13T16:00:07.760Z",
     "__v": 0
   }
 }
