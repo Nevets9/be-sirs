@@ -1,5 +1,6 @@
 const JanjiTemu = require('../models/janjiTemuModel');
 const User = require('../models/userModel');
+const catchAsync = require('../utils/catchAsync');
 
 exports.getAllJanjiTemu = async (req, res) => {
   try {
