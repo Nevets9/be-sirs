@@ -103,7 +103,7 @@ exports.getJanjiTemuById = async (req, res) => {
 };
 
 exports.deleteJanjiTemu = catchAsync(async (req, res) => {
-  const deleteJanjiTemu = await JanjiTemu.findOneAndDelete(req.params.id);
+  const deleteJanjiTemu = await JanjiTemu.findByIdAndDelete(req.params.id);
 
   if (!deleteJanjiTemu) {
     return res.status(404).json({ message: 'Janji Temu tidak ditemukan' });
