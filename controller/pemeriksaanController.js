@@ -1,19 +1,48 @@
 const Pemeriksaan = require('../models/pemeriksaanModel');
-const JanjiTemu = require('../models/janjiTemuModel');
+const User = require('../models/userModel');
 
 // Create pemeriksaan
 exports.createPemeriksaan = async (req, res) => {
   try {
-    const { janjiTemu, analisa, resepObat } = req.body;
+    const {
+      idPasien,
+      namaPasien,
+      nik,
+      umur,
+      alamat,
+      noHp,
+      idDokter,
+      keluhan,
+      tanggal,
+      analisa,
+      resepObat,
+    } = req.body;
 
-    // Pastikan janji temu tersedia
-    const janji = await JanjiTemu.findById(janjiTemu);
-    if (!janji) {
-      return res.status(404).json({ message: 'Janji temu tidak ditemukan' });
+    const pasien = await User.findById(idPasien);
+    const dokter = await User.findById(idDokter);
+
+    if (!pasien || pasien.role !== 'pasien') {
+      return res.status(404).json({ message: 'Pasien tidak ditemukan' });
+    }
+
+    if (!dokter || dokter.role !== 'dokter') {
+      return res.status(404).json({ message: 'Dokter tidak ditemukan' });
     }
 
     const pemeriksaanBaru = new Pemeriksaan({
-      janjiTemu,
+      pasien: {
+        idPasien,
+        namaPasien,
+        nik,
+        umur,
+        alamat,
+        noHp,
+      },
+      dokter: {
+        idDokter,
+      },
+      keluhan,
+      tanggal,
       analisa,
       resepObat,
     });
@@ -35,7 +64,7 @@ exports.createPemeriksaan = async (req, res) => {
 // Get all pemeriksaan
 exports.getAllPemeriksaan = async (req, res) => {
   try {
-    const data = await Pemeriksaan.find().populate('janjiTemu');
+    const data = await Pemeriksaan.find().sort({ tanggal: 1 });
     res.status(200).json({ message: 'Success', data });
   } catch (err) {
     res.status(500).json({
