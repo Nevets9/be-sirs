@@ -367,6 +367,18 @@
 }
 ```
 
+### DELETE `https://be-sirs.vercel.app/api/v1/janjiTemu/:id`
+
+**Delete janji temu**
+
+**Response:**
+
+```json
+{
+  "message": "Janji Temu berhasil dihapus"
+}
+```
+
 ---
 
 ## 🧾 Pemeriksaan Pasien

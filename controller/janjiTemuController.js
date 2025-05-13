@@ -100,3 +100,13 @@ exports.getJanjiTemuById = async (req, res) => {
     });
   }
 };
+
+exports.deleteJanjiTemu = catchAsync(async (req, res) => {
+  const deleteJanjiTemu = await JanjiTemu.findOneAndDelete(req.params.id);
+
+  if (!deleteJanjiTemu) {
+    return res.status(404).json({ message: 'Janji Temu tidak ditemukan' });
+  }
+
+  res.status(200).json({ message: 'Janji Temu berhasil dihapus' });
+});
