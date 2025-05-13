@@ -7,7 +7,8 @@ exports.getAllJanjiTemu = async (req, res) => {
     const janjiTemu = await JanjiTemu.find()
       .populate('pasien.idPasien', 'nama email') // Populate data pasien
       .populate('dokter.idDokter', 'namaDokter spesialisasi') // Populate data dokter
-      .select('-__v'); // Menghindari field __v yang digunakan untuk versioning di MongoDB
+      .select('-__v') // Menghindari field __v yang digunakan untuk versioning di MongoDB
+      .sort({ tanggal: 1 }); 
 
     res.status(200).json({
       status: 'success',
