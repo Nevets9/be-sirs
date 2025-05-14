@@ -2,6 +2,14 @@
 
 **Base URL:** `https://be-sirs.vercel.app/api/v1`
 
+**Run Local Application** 
+```json
+npm install
+```
+```json
+npm start
+```
+
 ---
 
 ## 🔐 Authentication
