@@ -223,6 +223,31 @@
 }
 ```
 
+### GET `https://be-sirs.vercel.app/api/v1/doctors/handlePasien`
+
+**Body:**
+
+```json
+{
+  "status": "success",
+  "message": "Jumlah pasien per dokter hari ini",
+  "data": [
+    {
+      "jumlahPasien": 1,
+      "dokterId": "68218d63781995746f6cf8db",
+      "namaDokter": "Philifs",
+      "spesialisasi": "Umum"
+    },
+    {
+      "jumlahPasien": 2,
+      "dokterId": "6820f15cbc80c050024d51e3",
+      "namaDokter": "Dr. Tirta",
+      "spesialisasi": "Umum"
+    }
+  ]
+}
+```
+
 ---
 
 ## 📅 Janji Temu
