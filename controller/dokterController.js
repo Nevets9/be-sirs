@@ -1,4 +1,6 @@
 const User = require('../models/userModel');
+const JanjiTemu = require('../models/janjiTemuModel');
+const catchAsync = require('../utils/catchAsync');
 
 exports.getAllDokters = async (req, res) => {
   try {
@@ -89,3 +91,50 @@ exports.deleteDokter = async (req, res) => {
       .json({ message: 'Gagal menghapus dokter', error: err.message });
   }
 };
+
+exports.getHandlePasien = catchAsync(async (req, res) => {
+  const today = new Date();
+
+  const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+  const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+  const pasienPerDokter = await JanjiTemu.aggregate([
+    {
+      $match: {
+        tanggal: { $gte: startOfDay, $lte: endOfDay },
+      },
+    },
+    {
+      $group: {
+        _id: '$dokter.idDokter',
+        jumlahPasien: { $sum: 1 },
+      },
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'dokterInfo',
+      },
+    },
+    {
+      $unwind: '$dokterInfo',
+    },
+    {
+      $project: {
+        dokterId: '$_id',
+        namaDokter: '$dokterInfo.nama',
+        spesialisasi: '$dokterInfo.dokterInfo.spesialisasi',
+        jumlahPasien: 1,
+        _id: 0,
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Jumlah pasien per dokter hari ini',
+    data: pasienPerDokter,
+  });
+});

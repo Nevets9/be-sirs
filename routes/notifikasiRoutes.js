@@ -1,12 +1,12 @@
 const express = require('express');
 const {
-  notifikasiDaftar,
+  notifikasiPasien,
   notifikasiDokter,
 } = require('../controller/notifikasiController');
 
 const router = express.Router();
 
-router.post('/daftar', notifikasiDaftar);
+router.get('/pasien/:id', notifikasiPasien);
 router.get('/dokter', notifikasiDokter);
 
 module.exports = router;

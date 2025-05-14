@@ -1,29 +1,24 @@
 const catchAsync = require('../utils/catchAsync');
-const moment = require('moment');
 const JanjiTemu = require('../models/janjiTemuModel');
 const User = require('../models/userModel');
 
-exports.notifikasiDaftar = catchAsync(async (req, res) => {
-  const today = moment().startOf('day');
-  const besok = moment().add(1, 'day').startOf('day');
+exports.notifikasiPasien = catchAsync(async (req, res) => {
+  const idPasien = req.params.id;
 
-  // Cari janji temu hari ini
-  const janjiHariIni = await JanjiTemu.find({
-    tanggal: { $gte: today.toDate(), $lt: besok.toDate() },
-  });
+  const janjiTemuList = await JanjiTemu.find({ 'pasien.idPasien': idPasien })
+    .select('pasien.namaPasien dokter.idDokter createdAt')
+    .sort({ createdAt: 1 });
 
-  const nomorAntrian = janjiHariIni.length + 1;
-
-  const pasien = await User.findById(req.body.userId);
+  // Tambahkan nomor antrian berdasarkan urutan
+  const janjiTemuWithAntrian = janjiTemuList.map((janji, index) => ({
+    ...janji.toObject(), // Convert mongoose document ke object
+    nomorAntrian: index + 1,
+  }));
 
   res.status(200).json({
     status: 'success',
-    message: `Nomor antrian Anda adalah ${nomorAntrian}`,
-    data: {
-      nama: pasien.name,
-      umur: req.body.umur,
-      nomorAntrian,
-    },
+    message: 'Daftar notifikasi janji temu pasien',
+    data: janjiTemuWithAntrian,
   });
 });
 
