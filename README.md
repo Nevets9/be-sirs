@@ -2,10 +2,12 @@
 
 **Base URL:** `https://be-sirs.vercel.app/api/v1`
 
-**Run Local Application** 
+**Run Local Application**
+
 ```json
 npm install
 ```
+
 ```json
 npm start
 ```
@@ -251,6 +253,44 @@ npm start
       "dokterId": "6820f15cbc80c050024d51e3",
       "namaDokter": "Dr. Tirta",
       "spesialisasi": "Umum"
+    }
+  ]
+}
+```
+
+### GET `https://be-sirs.vercel.app/api/v1/doctors/handlePasienBesok`
+
+**Body:**
+
+```json
+{
+  "status": "success",
+  "message": "Jumlah pasien per dokter untuk besok",
+  "data": [
+    {
+      "jumlahPasien": 1,
+      "dokterId": "682553721109150d178224ec",
+      "namaDokter": "Fauza",
+      "spesialisasi": "Obsteri"
+    }
+  ]
+}
+```
+
+### GET `https://be-sirs.vercel.app/api/v1/doctors/handlePasienLusa`
+
+**Body:**
+
+```json
+{
+  "status": "success",
+  "message": "Jumlah pasien per dokter untuk lusa",
+  "data": [
+    {
+      "jumlahPasien": 1,
+      "dokterId": "6825538c1109150d178224ef",
+      "namaDokter": "Pita",
+      "spesialisasi": "saraf"
     }
   ]
 }

@@ -100,8 +100,20 @@ exports.getHandlePasien = catchAsync(async (req, res) => {
   const localNow = new Date(now.getTime() + offsetMs);
 
   // Hitung awal dan akhir hari lokal
-  const startOfDay = new Date(localNow.getFullYear(), localNow.getMonth(), localNow.getDate());
-  const endOfDay = new Date(localNow.getFullYear(), localNow.getMonth(), localNow.getDate(), 23, 59, 59, 999);
+  const startOfDay = new Date(
+    localNow.getFullYear(),
+    localNow.getMonth(),
+    localNow.getDate()
+  );
+  const endOfDay = new Date(
+    localNow.getFullYear(),
+    localNow.getMonth(),
+    localNow.getDate(),
+    23,
+    59,
+    59,
+    999
+  );
 
   // Kembalikan ke UTC agar sesuai dengan data di MongoDB (yang disimpan dalam UTC)
   const utcStart = new Date(startOfDay.getTime() - offsetMs);
@@ -146,3 +158,114 @@ exports.getHandlePasien = catchAsync(async (req, res) => {
   });
 });
 
+exports.getHandlePasienBesok = catchAsync(async (req, res) => {
+  const now = new Date();
+  const offsetMs = 7 * 60 * 60 * 1000; // WIB offset
+  const localNow = new Date(now.getTime() + offsetMs);
+
+  // Dapatkan tanggal besok
+  const besok = new Date(localNow);
+  besok.setDate(besok.getDate() + 1);
+  const startOfDay = new Date(
+    besok.getFullYear(),
+    besok.getMonth(),
+    besok.getDate()
+  );
+  const endOfDay = new Date(
+    besok.getFullYear(),
+    besok.getMonth(),
+    besok.getDate(),
+    23,
+    59,
+    59,
+    999
+  );
+
+  const utcStart = new Date(startOfDay.getTime() - offsetMs);
+  const utcEnd = new Date(endOfDay.getTime() - offsetMs);
+
+  const pasienPerDokter = await JanjiTemu.aggregate([
+    { $match: { tanggal: { $gte: utcStart, $lte: utcEnd } } },
+    { $group: { _id: '$dokter.idDokter', jumlahPasien: { $sum: 1 } } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'dokterInfo',
+      },
+    },
+    { $unwind: '$dokterInfo' },
+    {
+      $project: {
+        dokterId: '$_id',
+        namaDokter: '$dokterInfo.nama',
+        spesialisasi: '$dokterInfo.dokterInfo.spesialisasi',
+        jumlahPasien: 1,
+        _id: 0,
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Jumlah pasien per dokter untuk besok',
+    data: pasienPerDokter,
+  });
+});
+
+exports.getHandlePasienLusa = catchAsync(async (req, res) => {
+  const now = new Date();
+  const offsetMs = 7 * 60 * 60 * 1000; // WIB offset
+  const localNow = new Date(now.getTime() + offsetMs);
+
+  // Dapatkan tanggal lusa
+  const lusa = new Date(localNow);
+  lusa.setDate(lusa.getDate() + 2);
+  const startOfDay = new Date(
+    lusa.getFullYear(),
+    lusa.getMonth(),
+    lusa.getDate()
+  );
+  const endOfDay = new Date(
+    lusa.getFullYear(),
+    lusa.getMonth(),
+    lusa.getDate(),
+    23,
+    59,
+    59,
+    999
+  );
+
+  const utcStart = new Date(startOfDay.getTime() - offsetMs);
+  const utcEnd = new Date(endOfDay.getTime() - offsetMs);
+
+  const pasienPerDokter = await JanjiTemu.aggregate([
+    { $match: { tanggal: { $gte: utcStart, $lte: utcEnd } } },
+    { $group: { _id: '$dokter.idDokter', jumlahPasien: { $sum: 1 } } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'dokterInfo',
+      },
+    },
+    { $unwind: '$dokterInfo' },
+    {
+      $project: {
+        dokterId: '$_id',
+        namaDokter: '$dokterInfo.nama',
+        spesialisasi: '$dokterInfo.dokterInfo.spesialisasi',
+        jumlahPasien: 1,
+        _id: 0,
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Jumlah pasien per dokter untuk lusa',
+    data: pasienPerDokter,
+  });
+});
