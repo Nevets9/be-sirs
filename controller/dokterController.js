@@ -93,15 +93,24 @@ exports.deleteDokter = async (req, res) => {
 };
 
 exports.getHandlePasien = catchAsync(async (req, res) => {
-  const today = new Date();
+  const now = new Date();
 
-  const startOfDay = new Date(today.setHours(0, 0, 0, 0));
-  const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+  // Geser waktu ke zona waktu WIB (UTC+7)
+  const offsetMs = 7 * 60 * 60 * 1000; // 7 jam dalam milidetik
+  const localNow = new Date(now.getTime() + offsetMs);
+
+  // Hitung awal dan akhir hari lokal
+  const startOfDay = new Date(localNow.getFullYear(), localNow.getMonth(), localNow.getDate());
+  const endOfDay = new Date(localNow.getFullYear(), localNow.getMonth(), localNow.getDate(), 23, 59, 59, 999);
+
+  // Kembalikan ke UTC agar sesuai dengan data di MongoDB (yang disimpan dalam UTC)
+  const utcStart = new Date(startOfDay.getTime() - offsetMs);
+  const utcEnd = new Date(endOfDay.getTime() - offsetMs);
 
   const pasienPerDokter = await JanjiTemu.aggregate([
     {
       $match: {
-        tanggal: { $gte: startOfDay, $lte: endOfDay },
+        tanggal: { $gte: utcStart, $lte: utcEnd },
       },
     },
     {
@@ -118,9 +127,7 @@ exports.getHandlePasien = catchAsync(async (req, res) => {
         as: 'dokterInfo',
       },
     },
-    {
-      $unwind: '$dokterInfo',
-    },
+    { $unwind: '$dokterInfo' },
     {
       $project: {
         dokterId: '$_id',
@@ -138,3 +145,4 @@ exports.getHandlePasien = catchAsync(async (req, res) => {
     data: pasienPerDokter,
   });
 });
+
